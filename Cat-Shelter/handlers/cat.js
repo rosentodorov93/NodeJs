@@ -17,7 +17,8 @@ module.exports = async (req, res) => {
       "Content-Type": "text/html",
     });
 
-    const addCatTemplate = await fs.readFile(filePath, "utf8");
+    const breedsTemplate = breeds.map(breed => `<option value=${breed}>${breed}</option>`)
+    const addCatTemplate = (await fs.readFile(filePath, "utf8")).replace('{{catBreeds}}', breedsTemplate);
     res.write(addCatTemplate);
     res.end();
   } else if (pathName === "/cats/add-breed" && req.method === "GET") {
@@ -30,6 +31,7 @@ module.exports = async (req, res) => {
     });
 
     const addBreedTemplate = await fs.readFile(filePath, "utf8");
+
     res.write(addBreedTemplate);
     res.end();
   } else if (pathName === "/cats/add-breed" && req.method === "POST") {
