@@ -17,10 +17,46 @@ module.exports = async (req, res) => {
       "Content-Type": "text/html",
     });
 
-    const breedsTemplate = breeds.map(breed => `<option value=${breed}>${breed}</option>`)
-    const addCatTemplate = (await fs.readFile(filePath, "utf8")).replace('{{catBreeds}}', breedsTemplate);
+    const breedsTemplate = breeds.map(
+      (breed) => `<option value=${breed}>${breed}</option>`
+    );
+    const addCatTemplate = (await fs.readFile(filePath, "utf8")).replace(
+      "{{catBreeds}}",
+      breedsTemplate
+    );
     res.write(addCatTemplate);
     res.end();
+  } else if (pathName === "/cats/add-cat" && req.method === "POST") {
+    let formData = "";
+    req.on("data", (data) => {
+      formData += data;
+    });
+
+    req.on("end", async () => {
+      const filePath = path.normalize(
+        path.join(__dirname, "../data/cats.json")
+      );
+      const body = qs.decode(formData);
+      console.log(body);
+
+      const data = await fs.readFile(filePath, "utf8");
+      if (!data) {
+        throw error("Unexpected error");
+      }
+
+      let cats = JSON.parse(data);
+      cats.push({
+        id: cats.length + 1,
+        name: body.name,
+        description: body.description,
+        imageUrl: body.imageUrl,
+        breed: body.breed,
+      });
+      const result = JSON.stringify(cats);
+      await fs.writeFile(filePath, result, "utf8");
+      res.writeHead(301, { location: "/" });
+      res.end();
+    });
   } else if (pathName === "/cats/add-breed" && req.method === "GET") {
     const filePath = path.normalize(
       path.join(__dirname, "../views/addBreed.html")
@@ -41,7 +77,9 @@ module.exports = async (req, res) => {
     });
 
     req.on("end", async () => {
-      const filePath = path.normalize(path.join(__dirname, "../data/breeds.json"))
+      const filePath = path.normalize(
+        path.join(__dirname, "../data/breeds.json")
+      );
       let body = qs.parse(formData);
       console.log(body);
 
