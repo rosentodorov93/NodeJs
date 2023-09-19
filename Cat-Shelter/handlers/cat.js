@@ -3,6 +3,7 @@ const fs = require("fs/promises");
 const path = require("path");
 const qs = require("querystring");
 const breeds = require("../data/breeds.json");
+const replaceData = require('../utils/replaceData');
 const cats = require("../data/cats");
 
 module.exports = async (req, res) => {
@@ -97,6 +98,22 @@ module.exports = async (req, res) => {
       await fs.writeFile(filePath, result, "utf-8");
     });
     res.writeHead(301, { location: "/" });
+    res.end();
+  }else if(pathName.includes("/cats-edit") && req.method === "GET"){
+    const editCatTemplatePath = path.normalize(path.join(__dirname, "../views/editCat.html"));
+
+    const catId = pathName.slice(pathName.lastIndexOf('/') + 1);
+    const cat = cats[catId - 1];
+    const editCatTemplate = await fs.readFile(editCatTemplatePath, "utf-8");
+    const breedsTemplate = breeds.map(
+      (breed) => `<option value=${breed}>${breed}</option>`
+    );
+    const modifiedEditTemplate = replaceData(editCatTemplate, cat).replace("{{catBreeds}}", breedsTemplate);
+
+    res.writeHead(200, {
+      "Content-Type": "text/html"
+    })
+    res.write(modifiedEditTemplate);
     res.end();
   }
 };
