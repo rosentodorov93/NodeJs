@@ -165,9 +165,9 @@ module.exports = async (req, res) => {
   } else if (pathName.includes("/cats-new-home") && req.method === "POST") {
     const catsPath = path.normalize(path.join(__dirname, "../data/cats.json"));
     const catId = pathName.slice(pathName.lastIndexOf("/") + 1);
-    console.log(cats);
+
     const newCats = cats.filter((cat) => cat.id != catId);
-    //console.log(newCats);
+
 
     const result = JSON.stringify(newCats);
 

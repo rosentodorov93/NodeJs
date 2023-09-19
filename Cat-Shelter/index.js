@@ -8,10 +8,6 @@ const port = 5050;
 const server = http.createServer(async (req, res) => {
   for(let handler of handlers){
     const result = await handler(req,res);
-    // if(result == true){
-    //     console.log('break')
-    //     break;
-    // }
   }
 });
 

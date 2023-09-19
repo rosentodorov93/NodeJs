@@ -17,7 +17,7 @@ function getContentType(url){
 
 module.exports = async (req,res) => {
     const pathName = url.parse(req.url).pathname;
-    console.log(pathName);
+
     if(pathName.startsWith('/content') && req.method === 'GET'){
 
         const filePath = `.${pathName}`;
