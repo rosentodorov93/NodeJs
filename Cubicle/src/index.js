@@ -1,6 +1,8 @@
 const express = require('express');
 const expressConfig = require('./config/expressConfig');
 const handlebarsConfig = require('./config/handlebarsConfig');
+const routes = require('./router');
+
 const port = 5050;
 
 
@@ -9,8 +11,6 @@ expressConfig(app);
 handlebarsConfig(app);
 
 
-app.get('/', (req, res) =>{
-    res.send("Hello from server!");
-})
+app.use(routes);
 
 app.listen(port, ()=> console.log(`Server is listening on port ${port}`));
