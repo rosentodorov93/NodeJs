@@ -32,9 +32,20 @@ exports.create = (cube)=>{
     return newCube;
 }
 
-exports.getAll = () =>{
-    const result = cubes.slice();
-    return result;
+exports.getAll = (search, from , to) =>{
+    let filteredCubes = cubes.slice();
+
+    if(search){
+        filteredCubes = filteredCubes.filter(cube => cube.name.toLocaleLowerCase().includes(search.toLocaleLowerCase()));
+    }
+    if(from){
+        filteredCubes = filteredCubes.filter(cube => cube.difficultyLevel >= Number(from));
+    }
+    if(to){
+        filteredCubes = filteredCubes.filter(cube => cube.difficultyLevel <= Number(to));
+    }
+
+    return filteredCubes;
 }
 
 exports.getById = (id) =>{
