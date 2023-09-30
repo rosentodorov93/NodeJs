@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
-const connectionString = 'mongodb://127.0.0.1:27017/cubicleDb'
+const connectionString = 'mongodb://127.0.0.1:27017/cubicleDb';
 
 async function connectDb(){
-    await mongoose.connect()
+    await mongoose.connect(connectionString)
 }
 
-module.exports = connectDb();
+module.exports = connectDb;
