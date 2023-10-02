@@ -5,3 +5,9 @@ exports.create = async (accesoryData) =>{
 
     return accesory;
 }
+
+exports.getAll = ()=> Accesory.find();
+
+exports.getAvaliableAccesories = (accesoryIds) =>{
+    return Accesory.find({_id: {$nin: accesoryIds}});
+}
