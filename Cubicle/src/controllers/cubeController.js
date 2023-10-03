@@ -20,10 +20,10 @@ router.post("/create", async (req, res) => {
 
 router.get("/details/:cubeId", async(req, res) =>{
     const {cubeId} = req.params;
-    const cube = await cubeService.getById(cubeId);
-    console.log(cube);
+    const cube = await cubeService.getById(cubeId).lean();
+    const hasAccesories = cube.accesories.length > 0;
 
-    res.render('details', {cube});
+    res.render('details', {cube, hasAccesories});
 })
 
 router.get('/attach-accesory/:cubeId', async (req, res) =>{
@@ -31,10 +31,18 @@ router.get('/attach-accesory/:cubeId', async (req, res) =>{
     
     const cube = await cubeService.getById(cubeId).lean();
     const accesories = await accesoryService.getAvaliableAccesories(cube.accesories).lean();
-    console.log(accesories);
     const canAttachAccesory = accesories.length > 0;
 
     res.render('accesory/attach', {cube, accesories, canAttachAccesory});
+})
+
+router.post('/attach-accesory/:cubeId', async (req, res) =>{
+    const { accessory: accesoryId } = req.body;
+    const {cubeId} = req.params;
+
+    await cubeService.attachAccesory(cubeId, accesoryId);
+
+    res.redirect(`/cubes/details/${cubeId}`);
 })
 
 module.exports = router;
