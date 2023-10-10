@@ -4,13 +4,11 @@ const handlebarsConfig = require("./config/handlebarsConfig");
 const connectDb = require("./config/mongooseConfig");
 
 const routes = require("./router");
-
-const port = 5050;
+const { PORT } = require("./constants");
 
 const app = express();
 expressConfig(app);
 handlebarsConfig(app);
-
 
 connectDb()
   .then(() => {
@@ -22,4 +20,4 @@ connectDb()
 
 app.use(routes);
 
-app.listen(port, () => console.log(`Server is listening on port ${port}`));
+app.listen(PORT, () => console.log(`Server is listening on port ${PORT}`));
