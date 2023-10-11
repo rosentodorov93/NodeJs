@@ -37,3 +37,7 @@ exports.attachAccesory = async (cubeId, accesoryId) => {
 };
 
 exports.getById = (id) => Cube.findById(id).populate('accesories');
+
+exports.edit = (id, data) => Cube.findByIdAndUpdate(id, data);
+
+exports.delete = (id) => Cube.findByIdAndDelete(id);
