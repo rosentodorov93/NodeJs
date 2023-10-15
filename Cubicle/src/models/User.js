@@ -21,7 +21,7 @@ userSchema.path('username').validate(function(username){
 })
 userSchema.virtual("repeatPassword").set(function(value){
     if(value !== this.password){
-        this.invalidate('password', 'must match with reapeat password')
+        this.invalidate('password', 'Passwords do not match!')
     }
 })
 userSchema.pre('save', async function(){
